@@ -54,6 +54,9 @@ public isolated function addUpdateMessage(string topicName, websubhub:UpdateMess
 
 isolated function produceKafkaMessage(string topicName, json payload) returns error? {
     byte[] serializedContent = payload.toJsonString().toBytes();
+    log:printInfo("Sending to kafka");
     check conn:statePersistProducer->send({ topic: topicName, value: serializedContent });
+    log:printInfo("Sent to kafka");
     check conn:statePersistProducer->'flush();
+    log:printInfo("Flushed");
 }

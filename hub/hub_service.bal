@@ -206,9 +206,10 @@ service object {
     # + message - Details of the subscription
     # + return - `error` if there is any unexpected error or else `()`
     isolated remote function onSubscriptionIntentVerified(websubhub:VerifiedSubscription message) returns error? {
-        log:printDebug("Subscription Intent verfication done", payload = message);
+        log:printInfo("Subscription Intent verfication done", payload = message);
          string consumerGroup = util:generateGroupName(message.hubTopic, message.hubCallback);
         message["consumerGroup"] = consumerGroup;
+        log:printInfo("Generated group name: ", payload = message);
         error? persistingResult = persist:addSubscription(message.cloneReadOnly());
         if persistingResult is error {
             log:printError("Error occurred while persisting the subscription ", err = persistingResult.message());
